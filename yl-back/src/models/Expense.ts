@@ -5,6 +5,7 @@ interface ExpenseAttributes {
     id: number;
     description: string;
     amount: number;
+    categoryId?: number | null; // Nullable Foreign Key
 }
 
 interface ExpenseCreationAttributes extends Optional<ExpenseAttributes, 'id'> { }
@@ -13,6 +14,7 @@ class Expense extends Model<ExpenseAttributes, ExpenseCreationAttributes> {
     public id!: number;
     public description!: string;
     public amount!: number;
+    public categoryId?: number | null;
 }
 
 Expense.init(
@@ -37,7 +39,16 @@ Expense.init(
                 isDecimal: true,
             },
         },
-
+        categoryId: {
+            type: DataTypes.INTEGER,
+            allowNull: true, 
+            references: {
+                model: 'Categories',
+                key: 'id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL', // If a Category is deleted, set `categoryId` to NULL
+        },
     },
     {
         sequelize,

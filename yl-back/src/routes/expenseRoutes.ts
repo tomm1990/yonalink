@@ -1,12 +1,13 @@
 import { Router } from 'express';
-import { getExpenses, postExpense, patchExpense, deleteExpense } from '../controllers/expenseController';
+import { getExpenses, postExpense, patchExpense, deleteExpense, downloadExpensesCSV } from '../controllers/expenseController';
 import { validateCreateExpense, validateExpenseId, validateUpdateExpense } from '../middlewares/expenseValidation';
 
 const router = Router();
 
-router.get('/expenses', getExpenses);
-router.post('/expenses', validateCreateExpense, postExpense);
-router.patch('/expenses/:id', validateExpenseId, validateUpdateExpense, patchExpense);
-router.delete('/expenses/:id', validateExpenseId, deleteExpense);
+router.get('/', getExpenses);
+router.post('/', validateCreateExpense, postExpense);
+router.patch('/:id', validateExpenseId, validateUpdateExpense, patchExpense);
+router.delete('/:id', validateExpenseId, deleteExpense);
+router.get('/download', downloadExpensesCSV);
 
 export default router;
