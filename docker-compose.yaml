@@ -1,6 +1,21 @@
 version: '3.3'
 
 services:
+  yl-db:
+    image: mysql:8.0.36-oraclelinux8
+    restart: always
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - yl-network
+    volumes:
+      - mysql_data:/var/lib/mysql
   yl-back:
     build: ./yl-back
     restart: always
@@ -23,21 +38,22 @@ services:
       - yl-db
     command: ["npm", "run", "dev"]
 
-  yl-db:
-    image: mysql:8.0.36-oraclelinux8
-    restart: always
-    env_file: .env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+  yl-front:
+    build: ./yl-front
     ports:
-      - "3306:3306"
+      - '5173:5173'
+    environment:
+      NODE_ENV: development
+      VITE_BACK_HOST: http://localhost
+      VITE_BACK_PORT: 3000
+    volumes:
+      - ./yl-front:/app:delegated
+      - /app/node_modules
     networks:
       - yl-network
-    volumes:
-      - mysql_data:/var/lib/mysql
+    depends_on:
+      - yl-back
+    command: ["npm", "run", "dev", "--", "--host"]
 
 networks:
   yl-network:
