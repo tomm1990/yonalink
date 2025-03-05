@@ -11,8 +11,6 @@ const config = {
 	port: process.env.PORT || 3000,
 };
 
-initDb();
-
 // TODO add API versioning
 // TODO add middleware for authorization
 
@@ -26,4 +24,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/expenses', expenseRoutes);
 app.use('/categories', categoryRoutes);
 
-app.listen(config.port, () => console.log(`Server running on http://localhost:` + config.port));
+const startServer = async () => {
+	await initDb();
+	app.listen(config.port, () =>
+		console.log(`🚀 Server running on http://localhost:${config.port}`)
+	);
+};
+
+startServer();
