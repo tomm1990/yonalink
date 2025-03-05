@@ -79,5 +79,4 @@ You can also connect to the MySQL database using a MySQL desktop client with the
 
 ### Future Enhancements
 - Implement a **user authentication system**.
-- Generate **monthly expense reports** in PDF or CSV format.
 - Allow users to define **custom expense categories**.
