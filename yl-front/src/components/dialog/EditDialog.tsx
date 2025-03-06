@@ -120,11 +120,11 @@ export const EditDialog = ({ item, mode, onClose, setSelectedItem }: EditDialogP
                     type="text"
                     fullWidth
                     variant="standard"
-                    value={item?.description ?? ""}
+                    value={item?.description || ""}
                     inputProps={{ minLength: 1 }}
                     onChange={handleDescriptionChange}
-                    error={!item?.description ?? "".length}
-                    helperText={!item?.description ?? "".length ? "Description is required" : ""}
+                    error={!item?.description || "".length}
+                    helperText={!item?.description || "".length ? "Description is required" : ""}
                 />
                 <TextField
                     required
