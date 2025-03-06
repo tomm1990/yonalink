@@ -24,7 +24,7 @@ export const SelectCategory = memo(({ categoryId, setSelectedItem }: SelectCateg
 
     return (
         <Select
-            value={categoryId}
+            value={data.some(cat => cat.id === categoryId) ? categoryId : 0}
             onChange={handleChange}
             displayEmpty
             disabled={isLoading || isFetching}

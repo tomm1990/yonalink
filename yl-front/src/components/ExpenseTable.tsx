@@ -123,7 +123,12 @@ export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) 
           <TableBody getRowModel={table.getRowModel()} />
         </Table>
       </TableContainer>
-      <EditDialog item={selectedItem} mode={Boolean(selectedItem?.id) ? 'edit' : 'add'} onClose={handleCloseDialog} setSelectedItem={handleSetSelectedItem} />
+      <EditDialog 
+        item={selectedItem}
+        mode={Boolean(selectedItem?.id) ? 'edit' : 'add'}
+        onClose={handleCloseDialog}
+        setSelectedItem={handleSetSelectedItem} 
+      />
     </>
   );
 }

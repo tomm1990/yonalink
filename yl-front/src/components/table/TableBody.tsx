@@ -1,12 +1,13 @@
 import { TableBody as MuiTableBody, TableCell, TableRow } from "@mui/material";
 import { RowModel, flexRender } from "@tanstack/react-table";
 import { Expense } from "../../types/Expense";
+import { memo } from "react";
 
 interface TableBodyProps {
     getRowModel: RowModel<Expense>;
 }
 
-export const TableBody = ({ getRowModel }: TableBodyProps) => {
+export const TableBody = memo(({ getRowModel }: TableBodyProps) => {
     return (
         <MuiTableBody>
             {getRowModel.rows.map((row) => (
@@ -27,4 +28,4 @@ export const TableBody = ({ getRowModel }: TableBodyProps) => {
             ))}
         </MuiTableBody>
     );
-}
+});

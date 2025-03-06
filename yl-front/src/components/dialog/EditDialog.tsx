@@ -5,7 +5,7 @@ import { Expense } from "../../types/Expense";
 import { SelectCategory } from "./SelectCategory";
 
 interface EditDialogProps {
-    item?: Expense;
+    item: Expense | undefined;
     mode: 'add' | 'edit';
     onClose: () => void;
     setSelectedItem: Dispatch<SetStateAction<Expense | undefined>>
@@ -21,20 +21,31 @@ export const EditDialog = ({ item, mode, onClose, setSelectedItem }: EditDialogP
     const { isIdle: isCreateIdle, isPending: isCreatePending, mutate: createMutate } = createExpenseMutation;
 
     const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value.trim();
-        setSelectedItem((prevState) => prevState && ({
-            ...prevState,
-            description: value
-        }));
+        const value = event.target.value;
+        setSelectedItem((prevState) => {
+            if (!prevState || prevState.description === value) {
+                return prevState;
+            }
+            return {
+                ...prevState,
+                description: value,
+            };
+        });
     }
 
     const handleAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         const numValue = Number(value);
-        setSelectedItem((prevState) => prevState && ({
-            ...prevState,
-            amount: numValue
-        }));
+
+        setSelectedItem((prevState) => {
+            if (!prevState || prevState.amount === numValue) {
+                return prevState;
+            }
+            return {
+                ...prevState,
+                amount: numValue
+            };
+        });
     }
 
     const handleDeleteClick = () => {
@@ -109,11 +120,11 @@ export const EditDialog = ({ item, mode, onClose, setSelectedItem }: EditDialogP
                     type="text"
                     fullWidth
                     variant="standard"
-                    defaultValue={item?.description}
+                    value={item?.description ?? ""}
                     inputProps={{ minLength: 1 }}
                     onChange={handleDescriptionChange}
-                    error={!item?.description.length}
-                    helperText={!item?.description.length ? "Description is required" : ""}
+                    error={!item?.description ?? "".length}
+                    helperText={!item?.description ?? "".length ? "Description is required" : ""}
                 />
                 <TextField
                     required
@@ -124,10 +135,10 @@ export const EditDialog = ({ item, mode, onClose, setSelectedItem }: EditDialogP
                     type="number"
                     fullWidth
                     variant="standard"
-                    defaultValue={item?.amount}
+                    value={item?.amount ?? 10}
                     onChange={handleAmountChange}
-                    error={(item?.amount || 0) <= 0}
-                    helperText={(item?.amount || 0) <= 0 ? "Amount must be greater than 0" : ""}
+                    error={(item?.amount ?? 10) <= 0}
+                    helperText={(item?.amount ?? 10) <= 0 ? "Amount must be greater than 0" : ""}
                 />
                 <SelectCategory categoryId={item?.category?.id || 0} setSelectedItem={setSelectedItem} />
             </DialogContent>
