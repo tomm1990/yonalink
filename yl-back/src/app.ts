@@ -4,6 +4,7 @@ import { initDb } from './models';
 import expenseRoutes from './routes/expenseRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import cors from 'cors';
+import { connectWithRetry } from './config/database';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use('/expenses', expenseRoutes);
 app.use('/categories', categoryRoutes);
 
 const startServer = async () => {
+	await connectWithRetry();
 	await initDb();
 	app.listen(config.port, () =>
 		console.log(`🚀 Server running on http://localhost:${config.port}`)

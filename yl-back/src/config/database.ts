@@ -11,13 +11,24 @@ const sequelize = new Sequelize(
         host: process.env.DB_HOST as string,
         dialect: 'mysql',
         port: Number(process.env.DB_PORT),
+        logging: false
     }
 );
 
 const MAX_RETRIES = 5;
 const RETRY_DELAY = 5000; // 5 seconds
 
-async function connectWithRetry(attempt = 1): Promise<void> {
+/**
+ * Ensures the application retries the database connection if MySQL is not yet ready.
+ * 
+ * This approach is necessary because Docker Compose v3.3 does not support 
+ * the `depends_on` condition with `service_healthy`, meaning that our application 
+ * may start before MySQL is fully initialized.
+ * 
+ * Instead of failing immediately, this function implements a retry mechanism 
+ * that waits and attempts to reconnect multiple times before giving up.
+ */
+export const connectWithRetry = async (attempt = 1): Promise<void> => {
     try {
         await sequelize.authenticate();
         console.log("✅ Connected to MySQL successfully!");
@@ -34,8 +45,5 @@ async function connectWithRetry(attempt = 1): Promise<void> {
         }
     }
 }
-
-// Start connection attempts
-connectWithRetry();
 
 export default sequelize;
