@@ -55,7 +55,7 @@ const seedDatabase = async () => {
 export const initDb = async () => {
     try {
         setupAssociations();
-        await sequelize.sync();
+        await sequelize.sync({ alter: true });
         console.log('✅ Database & tables created (if not exist)');
         await seedDatabase();
     } catch (error) {
