@@ -7,10 +7,7 @@ import {
 import { Table, flexRender } from "@tanstack/react-table";
 import { Expense } from "../../types/Expense";
 
-interface TableHeadProps extends Pick<Table<Expense>, "getHeaderGroups"> { }
-
-export const TableHead = ({ getHeaderGroups }: TableHeadProps) => {
-
+export const TableHead = ({ getHeaderGroups }: Pick<Table<Expense>, "getHeaderGroups">) => {
     return (
         <MuiTableHead>
             {getHeaderGroups().map((headerGroup) => (
