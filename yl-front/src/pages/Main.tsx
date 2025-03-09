@@ -12,8 +12,8 @@ export const Main = () => {
         sortDirection: 'desc'
     });
 
-    const { getExpenses } = useExpenses();
-    const { data = [], isLoading } = getExpenses(filter);
+    const { GetExpenses } = useExpenses();
+    const { data = [] } = GetExpenses(filter);
 
     const onSortChangeHandler = (value: 'asc' | 'desc' | undefined) => {
         setFilter((prevState) => ({

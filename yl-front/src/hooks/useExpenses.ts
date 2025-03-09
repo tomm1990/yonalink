@@ -6,7 +6,7 @@ import { Filter } from "../types/Filter";
 const useExpenses = () => {
     const queryClient = useQueryClient();
 
-    const getExpenses = (filter: Filter) =>
+    const GetExpenses = (filter: Filter) =>
         useQuery<Expense[]>({
             queryKey: ["expenses", { ...filter }],
             queryFn: ({ signal }) => ExpenseApi.get({ signal, filter }),
@@ -46,7 +46,7 @@ const useExpenses = () => {
     })
 
     return {
-        getExpenses,
+        GetExpenses,
         deleteExpenseMutation,
         updateExpenseMutation,
         createExpenseMutation
