@@ -8,7 +8,6 @@ interface EditDialogProps {
     item: Expense | undefined;
     mode: 'add' | 'edit';
     onClose: () => void;
-    setSelectedItem: Dispatch<SetStateAction<Expense | undefined>>
 };
 
 // TODO handle errors (banner and logs)
@@ -123,7 +122,7 @@ export const EditDialog = ({ item, mode, onClose, setSelectedItem }: EditDialogP
                     value={item?.description || ""}
                     inputProps={{ minLength: 1 }}
                     onChange={handleDescriptionChange}
-                    error={!item?.description || "".length}
+                    error={Boolean(!item?.description.length)}
                     helperText={!item?.description || "".length ? "Description is required" : ""}
                 />
                 <TextField
