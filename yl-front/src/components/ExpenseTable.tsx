@@ -19,7 +19,7 @@ export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) 
   const [selectedItem, setSelectedItem] = useState<Expense>();
 
   const memoizedSelectedItem = useMemo(() => selectedItem, [selectedItem]);
-  const setSelectedItemCallback = useCallback(setSelectedItem, []);
+  const setSelectedItemCallback = useCallback(setSelectedItem, [setSelectedItem]);
   const handleCloseDialogCallback = useCallback(() => {
     setSelectedItem(undefined);
   }, []);
@@ -125,7 +125,7 @@ export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) 
       </TableContainer>
       <EditDialog
         item={memoizedSelectedItem}
-        mode={Boolean(memoizedSelectedItem?.id) ? 'edit' : 'add'}
+        mode={memoizedSelectedItem?.id ? 'edit' : 'add'}
         onClose={handleCloseDialogCallback}
         setSelectedItem={setSelectedItemCallback}
       />
