@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent } from "react";
 import useExpenses from "../../hooks/useExpenses";
 import { Expense } from "../../types/Expense";
 import { SelectCategory } from "./SelectCategory/SelectCategory";
