@@ -10,8 +10,8 @@ interface SelectCategoryProps {
 }
 
 export const SelectCategory = memo(({ categoryId, setSelectedItem }: SelectCategoryProps) => {
-    const { getCategories } = useCategories();
-    const { data = [], isLoading, isFetching } = getCategories();
+    const { GetCategories } = useCategories();
+    const { data = [], isLoading, isFetching } = GetCategories();
 
     const handleChange = (event: SelectChangeEvent<number>) => {
         const categoryId = event.target.value; 

@@ -3,7 +3,7 @@ import CategoryApi from "../services/category.api";
 import { Category } from "../types/Category";
 
 const useCategories = () => {
-    const getCategories = () =>
+    const GetCategories = () =>
         useQuery<Category[]>({
             queryKey: ["categories"],
             queryFn: CategoryApi.get,
@@ -11,7 +11,7 @@ const useCategories = () => {
         });
 
     return {
-        getCategories
+        GetCategories
     };
 }
 
