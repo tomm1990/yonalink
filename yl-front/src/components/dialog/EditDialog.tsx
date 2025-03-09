@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } 
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import useExpenses from "../../hooks/useExpenses";
 import { Expense } from "../../types/Expense";
-import { SelectCategory } from "./SelectCategory";
+import { SelectCategory } from "./SelectCategory/SelectCategory";
 
 interface EditDialogProps {
     item: Expense | undefined;
