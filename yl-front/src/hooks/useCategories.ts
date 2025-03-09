@@ -7,6 +7,7 @@ const useCategories = () => {
         useQuery<Category[]>({
             queryKey: ["categories"],
             queryFn: CategoryApi.get,
+            staleTime: 60000
         });
 
     return {
