@@ -18,12 +18,14 @@ interface ExpenseTableProps {
 export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) => {
   const [selectedItem, setSelectedItem] = useState<Expense>();
 
+  const memoizedSelectedItem = useMemo(() => selectedItem, [selectedItem]);
+  const setSelectedItemCallback = useCallback(setSelectedItem, []);
+  const handleCloseDialogCallback = useCallback(() => {
+    setSelectedItem(undefined);
+  }, []);
+
   const handleOpenDialog = (item: Expense) => {
     setSelectedItem(item);
-  };
-
-  const handleCloseDialog = () => {
-    setSelectedItem(undefined);
   };
 
   const SHARED_COLUMNS_MAP = useMemo<Record<string, ColumnDef<Expense>>>(
@@ -55,7 +57,7 @@ export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) 
     []
   );
 
-  const desktopColumns:ColumnDef<Expense>[] = [
+  const desktopColumns = useMemo((): ColumnDef<Expense>[] => [
     {
       id: "id",
       accessorKey: "id",
@@ -83,28 +85,28 @@ export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) 
         if (!category) {
           return null;
         }
-        return (<Chip key={category.id} label={category.name} />)
+        return <Chip key={category.id} label={category.name} />;
       },
     },
     {
       id: "updatedAt",
       accessorKey: "updatedAt",
-      header: () => {
-        return (
-          <TableSortLabel
-            active
-            direction={filter?.sortDirection}
-            onClick={() => {
-              onSortChange(filter?.sortDirection === 'asc' ? 'desc' : 'asc');
-            }}
-          >
-            Updated At
-          </TableSortLabel>);
-      },
+      header: () => (
+        <TableSortLabel
+          active
+          direction={filter?.sortDirection}
+          onClick={() => {
+            onSortChange(filter?.sortDirection === 'asc' ? 'desc' : 'asc');
+          }}
+        >
+          Updated At
+        </TableSortLabel>
+      ),
       cell: ({ getValue }) => `${new Date(getValue<Date>()).toDateString()}`,
     },
     SHARED_COLUMNS_MAP.actions,
-  ]
+  ], [filter, onSortChange, SHARED_COLUMNS_MAP]);  // ✅ Dependencies
+
 
   const table = useReactTable({
     data,
@@ -112,8 +114,6 @@ export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) 
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
-
-  const handleSetSelectedItem = useCallback(setSelectedItem, [setSelectedItem]);
 
   return (
     <>
@@ -123,11 +123,11 @@ export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) 
           <TableBody getRowModel={table.getRowModel()} />
         </Table>
       </TableContainer>
-      <EditDialog 
-        item={selectedItem}
-        mode={Boolean(selectedItem?.id) ? 'edit' : 'add'}
-        onClose={handleCloseDialog}
-        setSelectedItem={handleSetSelectedItem} 
+      <EditDialog
+        item={memoizedSelectedItem}
+        mode={Boolean(memoizedSelectedItem?.id) ? 'edit' : 'add'}
+        onClose={handleCloseDialogCallback}
+        setSelectedItem={setSelectedItemCallback}
       />
     </>
   );
