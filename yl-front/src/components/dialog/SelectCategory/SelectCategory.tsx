@@ -1,8 +1,8 @@
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { Dispatch, SetStateAction, memo } from "react";
-import useCategories from "../../hooks/useCategories";
-import { Category } from "../../types/Category";
-import { Expense } from "../../types/Expense";
+import useCategories from "../../../hooks/useCategories";
+import { Category } from "../../../types/Category";
+import { Expense } from "../../../types/Expense";
 
 interface SelectCategoryProps {
     categoryId: Category['id'];
@@ -16,11 +16,15 @@ export const SelectCategory = memo(({ categoryId, setSelectedItem }: SelectCateg
     const handleChange = (event: SelectChangeEvent<number>) => {
         const categoryId = event.target.value; 
         const selectedCategory = data.find((cat) => cat.id === categoryId) || null;
-
-        setSelectedItem((prevState) =>
-            prevState && ({ ...prevState, category: selectedCategory })
-        );
+    
+        setSelectedItem((prevState) => {
+            if (!prevState || prevState.category?.id === categoryId) {
+                return prevState;
+            }
+            return { ...prevState, category: selectedCategory };
+        });
     };
+    
 
     return (
         <Select
