@@ -1,12 +1,16 @@
+
+import { Clear, Search } from "@mui/icons-material";
 import {
     FormControl,
+    IconButton,
     InputAdornment,
     InputLabel,
     OutlinedInput,
     styled,
 } from "@mui/material";
-import { ChangeEventHandler, memo } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { Filter } from "../types/Filter";
+import { debounce } from "../utils/debounce";
 
 const StyledFormControl = styled(FormControl)({
     maxWidth: "400px",
@@ -15,25 +19,47 @@ const StyledFormControl = styled(FormControl)({
 
 interface SearchInputProps {
     filter?: Filter;
-    onChange: ChangeEventHandler<HTMLInputElement>;
+    onChange: (value: string) => void;
 }
 
-export const SearchInput = memo(({ filter, onChange }: SearchInputProps) => {
-    console.log({ ...filter });
+export const SearchInput = ({ onChange }: SearchInputProps) => {
+    const [value, setValue] = useState<string>('');
+
+    const debouncedOnChange = useCallback(debounce(onChange, 1000), []);
+
+    const changeInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const newValue = event.target.value;
+        setValue(newValue);
+        debouncedOnChange(newValue);
+    }
+
+    const handleClearClick = () => {
+        setValue('');
+        onChange('');
+    };
+
     return (
         <StyledFormControl>
             <InputLabel htmlFor="expense-search-filter-input">Search item</InputLabel>
             <OutlinedInput
-                id="expense-search-filter-input "
+                id="expense-search-filter-input"
                 label="Search item"
-                aria-label="Search item input"
-                defaultValue={""}
-                onChange={onChange}
+                value={value}
+                onChange={changeInputHandler}
                 startAdornment={
                     <InputAdornment position="start">
+                        <Search aria-label="search icon" />
                     </InputAdornment>
                 }
+                endAdornment={
+                    value && <InputAdornment position="end">
+                        <IconButton onClick={handleClearClick} aria-label="clear search">
+                            <Clear />
+                        </IconButton>
+                    </InputAdornment>
+                }
+                aria-label="search input"
             />
         </StyledFormControl>
     );
-});
+};

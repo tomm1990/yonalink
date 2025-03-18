@@ -2,6 +2,7 @@ import { Divider, Snackbar, Stack, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { ExpenseTable } from "../components/ExpenseTable";
 import { MonthlyExpenseSummary } from "../components/MonthlyExpenseSummary";
+import { SearchInput } from "../components/SearchInput";
 import useExpenses from "../hooks/useExpenses";
 import { Filter } from "../types/Filter";
 
@@ -32,7 +33,7 @@ export const Main = () => {
     return (
         <Stack spacing={2} divider={<Divider />}>
             <Typography variant="h3">Main page</Typography>
-            {/* <SearchInput filter={filter} onChange={onInputChangeHandler} /> */}
+            <SearchInput onChange={(value: string) => { console.log('value', value) }} />
             <MonthlyExpenseSummary total={total} filter={filter} isLoading={isLoading} />
             <ExpenseTable data={data} filter={filter} onSortChange={onSortChangeHandler} />
             <Snackbar
