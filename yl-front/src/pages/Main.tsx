@@ -14,7 +14,7 @@ export const Main = () => {
     const [filter, setFilter] = useState<Filter>(DEFAULT_FILTER);
 
     const { GetExpenses } = useExpenses();
-    const { data = [], isError, error } = GetExpenses(filter);
+    const { data = [], isError, error, isLoading } = GetExpenses(filter);
 
     const onSortChangeHandler = (value: 'asc' | 'desc' | undefined) => {
         setFilter((prevState) => ({
@@ -33,7 +33,7 @@ export const Main = () => {
         <Stack spacing={2} divider={<Divider />}>
             <Typography variant="h3">Main page</Typography>
             {/* <SearchInput filter={filter} onChange={onInputChangeHandler} /> */}
-            <MonthlyExpenseSummary total={total} filter={filter} />
+            <MonthlyExpenseSummary total={total} filter={filter} isLoading={isLoading} />
             <ExpenseTable data={data} filter={filter} onSortChange={onSortChangeHandler} />
             <Snackbar
                 open={isError}

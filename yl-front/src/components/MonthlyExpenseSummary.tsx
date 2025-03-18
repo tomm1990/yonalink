@@ -1,6 +1,6 @@
 
 import { Download } from "@mui/icons-material";
-import { Button, Card, CardActions, CardContent, CircularProgress, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CircularProgress, Skeleton, Typography } from "@mui/material";
 import { useState } from "react";
 import ExpenseApi from "../services/expense.api";
 import { Filter } from "../types/Filter";
@@ -8,9 +8,10 @@ import { Filter } from "../types/Filter";
 interface MonthlyExpenseSummaryProps {
     total: number;
     filter: Filter;
+    isLoading: boolean;
 };
 
-export const MonthlyExpenseSummary = ({ total, filter }: MonthlyExpenseSummaryProps) => {
+export const MonthlyExpenseSummary = ({ total, filter, isLoading }: MonthlyExpenseSummaryProps) => {
     const [loading, setLoading] = useState(false);
 
     const handleDownload = async () => {
@@ -45,8 +46,8 @@ export const MonthlyExpenseSummary = ({ total, filter }: MonthlyExpenseSummaryPr
                 <Typography variant="h6" color="text.secondary">
                     Total Expenses for this Month
                 </Typography>
-                <Typography variant="h4" color="primary" >
-                    ${total.toFixed(2)}
+                <Typography variant="h4" color="primary">
+                    {isLoading ? <Skeleton /> : `${total.toFixed(2)}`}
                 </Typography>
             </CardContent>
             <CardActions>
