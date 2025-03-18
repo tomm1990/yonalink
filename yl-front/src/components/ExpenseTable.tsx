@@ -11,7 +11,7 @@ import { TableHead } from "./table/TableHead";
 
 interface ExpenseTableProps {
   data: Expense[];
-  filter?: Filter;
+  filter: Filter;
   onSortChange: (value: 'asc' | 'desc' | undefined) => void;
 }
 
@@ -105,7 +105,7 @@ export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) 
       cell: ({ getValue }) => `${new Date(getValue<Date>()).toDateString()}`,
     },
     SHARED_COLUMNS_MAP.actions,
-  ], [filter, onSortChange, SHARED_COLUMNS_MAP]);  // ✅ Dependencies
+  ], [filter, onSortChange, SHARED_COLUMNS_MAP]);
 
 
   const table = useReactTable({

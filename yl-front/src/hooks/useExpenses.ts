@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { UseQueryResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ExpenseApi from "../services/expense.api";
 import { Expense } from "../types/Expense";
 import { Filter } from "../types/Filter";
@@ -6,7 +6,7 @@ import { Filter } from "../types/Filter";
 const useExpenses = () => {
     const queryClient = useQueryClient();
 
-    const GetExpenses = (filter: Filter) =>
+    const GetExpenses = (filter: Filter): UseQueryResult<Expense[]> =>
         useQuery<Expense[]>({
             queryKey: ["expenses", { ...filter }],
             queryFn: ({ signal }) => ExpenseApi.get({ signal, filter }),

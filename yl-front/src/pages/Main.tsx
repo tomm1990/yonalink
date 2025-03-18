@@ -1,19 +1,20 @@
-import { Divider, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { Divider, Snackbar, Stack, Typography } from "@mui/material";
+import { useMemo, useState } from "react";
 import { ExpenseTable } from "../components/ExpenseTable";
 import { MonthlyExpenseSummary } from "../components/MonthlyExpenseSummary";
 import useExpenses from "../hooks/useExpenses";
 import { Filter } from "../types/Filter";
 
+const DEFAULT_FILTER: Filter = {
+    sortBy: 'updatedAt',
+    sortDirection: 'desc'
+};
 
 export const Main = () => {
-    const [filter, setFilter] = useState<Filter>({
-        sortBy: 'updatedAt',
-        sortDirection: 'desc'
-    });
+    const [filter, setFilter] = useState<Filter>(DEFAULT_FILTER);
 
     const { GetExpenses } = useExpenses();
-    const { data = [] } = GetExpenses(filter);
+    const { data = [], isError, error } = GetExpenses(filter);
 
     const onSortChangeHandler = (value: 'asc' | 'desc' | undefined) => {
         setFilter((prevState) => ({
@@ -22,14 +23,23 @@ export const Main = () => {
         }));
     };
 
-    const total = data.reduce((acc, expense) => acc + Number(expense.amount), 0);
+    const total = useMemo(() => data.reduce((acc, expense) => acc + Number(expense.amount), 0), [data]);
+
+    if (isError) {
+        console.error(error);
+    }
 
     return (
         <Stack spacing={2} divider={<Divider />}>
             <Typography variant="h3">Main page</Typography>
             {/* <SearchInput filter={filter} onChange={onInputChangeHandler} /> */}
-            <MonthlyExpenseSummary total={total} filter={filter}/>
+            <MonthlyExpenseSummary total={total} filter={filter} />
             <ExpenseTable data={data} filter={filter} onSortChange={onSortChangeHandler} />
+            <Snackbar
+                open={isError}
+                autoHideDuration={6000}
+                message="Not able to fetch results"
+            />
         </Stack>
     )
 }
