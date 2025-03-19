@@ -47,7 +47,7 @@ export const MonthlyExpenseSummary = ({ total, filter, isLoading }: MonthlyExpen
                     Total Expenses for this Month
                 </Typography>
                 <Typography variant="h4" color="primary">
-                    {isLoading ? <Skeleton /> : `${total.toFixed(2)}`}
+                    {isLoading ? <Skeleton /> : `$${total.toFixed(2)}`}
                 </Typography>
             </CardContent>
             <CardActions>
