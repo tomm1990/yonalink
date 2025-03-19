@@ -1,4 +1,3 @@
-
 import { Clear, Search } from "@mui/icons-material";
 import {
     FormControl,
@@ -9,6 +8,7 @@ import {
     styled,
 } from "@mui/material";
 import { ChangeEvent, useCallback, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Filter } from "../types/Filter";
 import { debounce } from "../utils/debounce";
 
@@ -18,14 +18,16 @@ const StyledFormControl = styled(FormControl)({
 });
 
 interface SearchInputProps {
-    filter?: Filter;
-    onChange: (value: string) => void;
+    onInputChange: <T extends keyof Filter>(key: T, value: Filter[T]) => void
 }
 
-export const SearchInput = ({ onChange }: SearchInputProps) => {
-    const [value, setValue] = useState<string>('');
+export const SearchInput = ({ onInputChange }: SearchInputProps) => {
+    const [searchParams] = useSearchParams();
+    const [value, setValue] = useState<string>(searchParams.get('description') ?? '');
 
-    const debouncedOnChange = useCallback(debounce(onChange, 1000), []);
+    const debouncedOnChange = useCallback(debounce((value: string) => {
+        onInputChange('description', value);
+    }, 1000), [onInputChange]);
 
     const changeInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
@@ -35,7 +37,7 @@ export const SearchInput = ({ onChange }: SearchInputProps) => {
 
     const handleClearClick = () => {
         setValue('');
-        onChange('');
+        onInputChange('description', '');
     };
 
     return (
