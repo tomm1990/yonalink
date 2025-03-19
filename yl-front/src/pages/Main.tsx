@@ -52,7 +52,7 @@ export const Main = () => {
             <Typography variant="h3">Main page</Typography>
             <SearchInput onInputChange={handleFilterChange} />
             <MonthlyExpenseSummary total={total} filter={filter} isLoading={isLoading} />
-            <ExpenseTable data={data} filter={filter} onSortChange={onSortChangeHandler} />
+            <ExpenseTable data={data} filter={filter} onSortChange={handleFilterChange} />
             <Snackbar
                 open={isError}
                 autoHideDuration={6000}

@@ -12,7 +12,7 @@ import { TableHead } from "./table/TableHead";
 interface ExpenseTableProps {
   data: Expense[];
   filter: Filter;
-  onSortChange: (value: 'asc' | 'desc' | undefined) => void;
+  onSortChange: <T extends keyof Filter>(key: T, value: Filter[T]) => void
 }
 
 export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) => {
@@ -96,7 +96,7 @@ export const ExpenseTable = ({ data, filter, onSortChange }: ExpenseTableProps) 
           active
           direction={filter?.sortDirection}
           onClick={() => {
-            onSortChange(filter?.sortDirection === 'asc' ? 'desc' : 'asc');
+            onSortChange('sortDirection', filter?.sortDirection === 'asc' ? 'desc' : 'asc');
           }}
         >
           Updated At
