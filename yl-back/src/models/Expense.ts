@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database';
 
-interface ExpenseAttributes {
+export interface ExpenseAttributes {
     id: number;
     description: string;
     amount: number;
@@ -41,7 +41,7 @@ Expense.init(
         },
         categoryId: {
             type: DataTypes.INTEGER,
-            allowNull: true, 
+            allowNull: true,
             references: {
                 model: 'Categories',
                 key: 'id',

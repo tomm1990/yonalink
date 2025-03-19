@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { Parser } from 'json2csv';
+import { Op, WhereOptions } from 'sequelize';
 import { Category, Expense } from '../models';
+import { ExpenseAttributes } from '../models/Expense';
 import { FilterParams } from '../types/FilterParams';
 
 export const downloadExpensesCSV = async (req: Request, res: Response) => {
@@ -63,14 +65,21 @@ export const getExpenses = async (req: Request, res: Response) => {
         const {
             sortBy = 'updatedAt',
             sortDirection = 'desc',
+            description
         }: FilterParams = req.query;
 
         const validSortBy = ['createdAt', 'updatedAt'].includes(sortBy) ? sortBy : 'updatedAt';
         const validSortDirection = ['asc', 'desc'].includes(sortDirection) ? sortDirection : 'desc';
 
+        const whereClause: WhereOptions<ExpenseAttributes> = {};
+        if (description) {
+            whereClause.description = { [Op.like]: `%${description}%` };
+        }
+
         const expenses = await Expense.findAll({
             attributes: ['id', 'description', 'amount', 'updatedAt'],
             order: [[validSortBy, validSortDirection]],
+            where: whereClause,
             include: [
                 {
                     model: Category,
